@@ -6,7 +6,7 @@
   <packaging>jar</packaging>
   <name>css-query-parser</name>
   <description>css query parser</description>
-  <version>1.0</version>
+  <version>1.0-JLM-SNAPSHOT</version>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
