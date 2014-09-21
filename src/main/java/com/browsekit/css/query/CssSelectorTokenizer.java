@@ -52,8 +52,25 @@ public class CssSelectorTokenizer {
 			}
 		});
 	}
-
+	
+	/**
+	 * Use the default Parts
+	 * @param selector
+	 * @return
+	 * @throws CssQueryUnknownGrammarException
+	 */
 	public SelectorPhraseList parse(String selector) throws CssQueryUnknownGrammarException {
+		return parse(this.parts, selector);
+	}
+	
+	/**
+	 * Use custom Parts
+	 * @param parts
+	 * @param selector
+	 * @return
+	 * @throws CssQueryUnknownGrammarException
+	 */
+	public SelectorPhraseList parse(List<Part> parts, String selector) throws CssQueryUnknownGrammarException {
 		// setup with initial token
 		SelectorPhraseList tokens = new SelectorPhraseList();
 		SelectorPhrase currentToken = new SelectorPhrase();
@@ -91,10 +108,6 @@ public class CssSelectorTokenizer {
 			instance = new CssSelectorTokenizer();
 		}
 		return instance;
-	}
-
-	public List<Part> getParts(){
-		return parts;
 	}
 
 }
