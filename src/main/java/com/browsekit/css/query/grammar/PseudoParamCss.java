@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 
 import com.browsekit.css.query.CssSelectorTokenizer;
 import com.browsekit.css.query.CssQueryUnknownGrammarException;
+import com.browsekit.css.query.CssSelectorTokenizerFactory;
 import com.browsekit.css.query.tokens.SelectorPhrase;
 import com.browsekit.css.query.tokens.SelectorPhraseList;
 import com.browsekit.css.query.tokens.pseudo.*;
@@ -25,7 +26,7 @@ public class PseudoParamCss implements Part {
 		}
 
 		CssPseudoToken pseudoToken = null;
-		SelectorPhraseList cssParams = CssSelectorTokenizer.parse(matcher.group(2));
+		SelectorPhraseList cssParams = CssSelectorTokenizerFactory.tokenizer().parse(matcher.group(2));
 
 		// could use a switch statement in Java7, but is it the right way to do it?
 		String pseudoParamType = matcher.group(1);
