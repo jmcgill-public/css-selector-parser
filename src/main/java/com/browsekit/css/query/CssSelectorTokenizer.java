@@ -1,6 +1,7 @@
 package com.browsekit.css.query;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.browsekit.css.query.grammar.*;
@@ -8,39 +9,51 @@ import com.browsekit.css.query.tokens.SelectorPhrase;
 import com.browsekit.css.query.tokens.SelectorPhraseList;
 
 public class CssSelectorTokenizer {
+	private static CssSelectorTokenizer instance;
+	private List<Part> parts;
 
-	public static List<Part> parts = new ArrayList<Part>(){
-		{
-			// these parts should be in the order they are desired to be found in
-			// (simple while loop used to discover which applies, so order is important)
-			// thus if two patterns can match the same text, the one more specific should be first
+	private CssSelectorTokenizer(){
+		init();
+	}
+	
+	private void init() {
+		parts = 
+				Collections.synchronizedList(
+						new ArrayList<Part>(){
+							private static final long serialVersionUID = 1349724310024159236L;
 
-			// phrase or element separation
-			add(new PhraseDeliminator());
-			//TODO add(new DirectDescendant()); // /^\s*>\s*/
-			add(new Descendant());
+			{
+				// these parts should be in the order they are desired to be found in
+				// (simple while loop used to discover which applies, so order is important)
+				// thus if two patterns can match the same text, the one more specific should be first
 
-			// specificity 0,1,0,0
-			add(new Id());
+				// phrase or element separation
+				add(new PhraseDeliminator());
+				//TODO add(new DirectDescendant()); // /^\s*>\s*/
+				add(new Descendant());
 
-			// specificity 0,0,1,0
-			add(new ClassName());
-			add(new AttributeEquals());
-			add(new AttributeBeginsWith());
-			add(new AttributeEndsWith());
-			add(new AttributeContains());
-			add(new AttributeHas());
+				// specificity 0,1,0,0
+				add(new Id());
 
-			// specificity 0,0,0,1
-			add(new Element());
-			add(new PseudoParamCss());
-			//TODO add(new PseudoParam()); // /^\:([a-z0-9\-]+)\((.+?)\)/i
-			//TODO add(new Pseudo()); // /^\:([a-z0-9\-]+)/i
+				// specificity 0,0,1,0
+				add(new ClassName());
+				add(new AttributeEquals());
+				add(new AttributeBeginsWith());
+				add(new AttributeEndsWith());
+				add(new AttributeContains());
+				add(new AttributeHas());
 
-		}
-	};
+				// specificity 0,0,0,1
+				add(new Element());
+				add(new PseudoParamCss());
+				//TODO add(new PseudoParam()); // /^\:([a-z0-9\-]+)\((.+?)\)/i
+				//TODO add(new Pseudo()); // /^\:([a-z0-9\-]+)/i
 
-	public static SelectorPhraseList parse(String selector) throws CssQueryUnknownGrammarException {
+			}
+		});
+	}
+
+	public SelectorPhraseList parse(String selector) throws CssQueryUnknownGrammarException {
 		// setup with initial token
 		SelectorPhraseList tokens = new SelectorPhraseList();
 		SelectorPhrase currentToken = new SelectorPhrase();
@@ -71,6 +84,13 @@ public class CssSelectorTokenizer {
 		// remove any erroneous blank tokens (deep)
 		tokens.clean();
 		return tokens;
+	}
+
+	public static CssSelectorTokenizer instance() {
+		if (instance == null) {
+			instance = new CssSelectorTokenizer();
+		}
+		return instance;
 	}
 
 
