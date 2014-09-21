@@ -3,4 +3,5 @@ Usage
 Java code:
 
 	String selector = "body div#main";
-    SelectorPhraseList selectorTokens = CssSelectorTokenizer.parse(selector);
+	CssSelectorTokenizer tokenizer = CssSelectorTokenizerFactory.tokenizer();
+	SelectorPhraseList selectorTokens = tokenizer.parse(selector);
