@@ -8,12 +8,20 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import org.apache.commons.lang.StringUtils;
+import org.junit.Before;
 import org.junit.Test;
 
 public class CssTest {
 	// src/test/resources/testcases.txt
 	private static final String TESTCASES = "testcases.txt";
-
+	private CssSelectorTokenizer tokenizer;
+	
+	@Before
+	public void setup() {
+		tokenizer = CssSelectorTokenizerFactory.tokenizer();
+		assertNotNull(tokenizer);
+	}
+	
 	@Test
 	public void test() throws CssQueryUnknownGrammarException, IOException {
 		InputStream testcases = ClassLoader.getSystemResourceAsStream(TESTCASES);
@@ -26,7 +34,7 @@ public class CssTest {
 			if (query.startsWith("//")) continue;
 			if (query.matches("^$")) continue;
 
-			assertEquals(query, CssSelectorTokenizer.parse(query).toString());
+			assertEquals(query, tokenizer.parse(query).toString());
 		}
 	}
 }
